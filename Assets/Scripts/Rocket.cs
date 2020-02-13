@@ -10,6 +10,7 @@ public class Rocket : MonoBehaviour
 
     
     public Transform thrusterForcePos;
+    public Transform RocketHead;
 
     [SerializeField]
     float rot;
@@ -43,8 +44,12 @@ public class Rocket : MonoBehaviour
         {
             rb.isKinematic = false;
 
+            Vector3 forceOrientation = RocketHead.position - thrusterForcePos.position;
+
+            Debug.Log(forceOrientation);
+
             // rb.AddExplosionForce(force, thrusterForce.position, radius);
-            rb.AddForceAtPosition(force*Vector3.up, thrusterForcePos.position);
+            rb.AddForceAtPosition(force*forceOrientation, thrusterForcePos.position);
         }
 
         
