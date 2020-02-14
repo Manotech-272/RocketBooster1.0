@@ -7,10 +7,8 @@ public class Rocket : MonoBehaviour
 
     protected Rigidbody rb;
     
-
-    
-    public Transform thrusterForcePos;
-    public Transform RocketHead;
+    // public Transform thrusterForcePos;
+    // public Transform RocketHead;
 
     [SerializeField]
     float rot;
@@ -44,19 +42,22 @@ public class Rocket : MonoBehaviour
         {
             rb.isKinematic = false;
 
-            Vector3 forceOrientation = RocketHead.position - thrusterForcePos.position;
+            // Vector3 forceOrientation = RocketHead.position - thrusterForcePos.position;
 
-            Debug.Log(forceOrientation);
+
 
             // rb.AddExplosionForce(force, thrusterForce.position, radius);
-            rb.AddForceAtPosition(force*forceOrientation, thrusterForcePos.position);
+            // rb.AddForceAtPosition(force*forceOrientation, thrusterForcePos.position);
+
+            rb.AddRelativeForce(Vector3.up * force);
+
         }
 
         
         float x = Input.GetAxis("Horizontal");
         // rb.AddExplosionForce(force, thrusterForce.position, radius);
 
-        transform.Rotate(x * rot * new Vector3(0,1,0));
+        transform.Rotate(x * rot * new Vector3(0,0,1));
         
     }
 }
