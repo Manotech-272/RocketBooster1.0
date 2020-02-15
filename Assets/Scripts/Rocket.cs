@@ -6,9 +6,11 @@ public class Rocket : MonoBehaviour
 {
 
     protected Rigidbody rb;
+    protected AudioSource audioS;
+    protected ParticleSystem engineFlames;
     
-    // public Transform thrusterForcePos;
-    // public Transform RocketHead;
+
+    
 
     [SerializeField]
     float rot;
@@ -22,7 +24,9 @@ public class Rocket : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        
+        audioS = GetComponent<AudioSource>();
+        engineFlames = transform.Find("Rocket").transform.Find("Engine").transform.Find("RocketFlame").GetComponent<ParticleSystem>();
+       
     }
     void Start()
     {
@@ -38,26 +42,36 @@ public class Rocket : MonoBehaviour
 
     private void processInput()
     {
+        Thrust();
+        Rotate();
+
+    }
+
+    private void Rotate()
+    {
+        float x = Input.GetAxis("Horizontal");
+        transform.Rotate(x * -rot * new Vector3(0, 0, 1));
+    }
+
+    private void Thrust()
+    {
+        if (Input.GetButtonDown("Jump"))
+        {
+            audioS.Play();
+            engineFlames.Play();
+        }
+
+        if (Input.GetButtonUp("Jump"))
+        {
+            audioS.Stop();
+            engineFlames.Stop();
+        }
+
         if (Input.GetButton("Jump"))
         {
             rb.isKinematic = false;
-
-            // Vector3 forceOrientation = RocketHead.position - thrusterForcePos.position;
-
-
-
-            // rb.AddExplosionForce(force, thrusterForce.position, radius);
-            // rb.AddForceAtPosition(force*forceOrientation, thrusterForcePos.position);
-
             rb.AddRelativeForce(Vector3.up * force);
 
         }
-
-        
-        float x = Input.GetAxis("Horizontal");
-        // rb.AddExplosionForce(force, thrusterForce.position, radius);
-
-        transform.Rotate(x * rot * new Vector3(0,0,1));
-        
     }
 }
