@@ -6,11 +6,11 @@ public class RockePlaceHolder : MonoBehaviour
 {
     protected Rigidbody rb;
     protected AudioSource audioS;
-    //protected ParticleSystem engineFlames;
+    protected ParticleSystem engineFlames;
+    protected ParticleSystem deathExplosion;
 
-   
 
-    
+
 
     public enum State { Alive, Dying, Transcending }
 
@@ -35,7 +35,8 @@ public class RockePlaceHolder : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         audioS = GetComponent<AudioSource>();
-        //engineFlames = transform.Find("Rocket").transform.Find("Engine").transform.Find("RocketFlame").GetComponent<ParticleSystem>();
+        engineFlames = transform.Find("RocketFlameGeometric").GetComponent<ParticleSystem>();
+        deathExplosion = transform.Find("ExplosionFlameGeometric").GetComponent<ParticleSystem>();
 
     }
     void Start()
@@ -43,7 +44,7 @@ public class RockePlaceHolder : MonoBehaviour
       state = State.Alive;
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         processInput();
@@ -72,7 +73,7 @@ public class RockePlaceHolder : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
         {
             audioS.PlayOneShot(SoundManager.instance.soundThruster);
-            //engineFlames.Play();
+            engineFlames.Play();
         }
 
         if (Input.GetButtonUp("Jump"))
@@ -91,7 +92,7 @@ public class RockePlaceHolder : MonoBehaviour
         else
         {
             audioS.Stop();
-            //engineFlames.Stop();
+            engineFlames.Stop();
         }
     }
 
@@ -111,6 +112,9 @@ public class RockePlaceHolder : MonoBehaviour
                     state = State.Dying;
                     audioS.Stop();
                     audioS.PlayOneShot(SoundManager.instance.soundImpact);
+                    rb.freezeRotation = false;
+                    rb.constraints = RigidbodyConstraints.None;
+                    deathExplosion.Play();
                     break;
             }
         }

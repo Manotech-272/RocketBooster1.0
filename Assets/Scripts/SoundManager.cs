@@ -16,6 +16,8 @@ public class SoundManager : MonoBehaviour
 
     public AudioClip soundThruster;
 
+    public AudioClip soundBackground;
+
     public static SoundManager instance;
 
     void Start()
