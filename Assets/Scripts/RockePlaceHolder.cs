@@ -8,9 +8,15 @@ public class RockePlaceHolder : MonoBehaviour
     protected AudioSource audioS;
     //protected ParticleSystem engineFlames;
 
-    public bool gameOver;
+   
 
+    
 
+    public enum State { Alive, Dying, Transcending }
+
+    public State state;
+
+    SoundManager sManInstance = SoundManager.instance;
 
 
     [SerializeField]
@@ -34,7 +40,7 @@ public class RockePlaceHolder : MonoBehaviour
     }
     void Start()
     {
-        gameOver = false;
+      state = State.Alive;
     }
 
     // Update is called once per frame
@@ -46,7 +52,7 @@ public class RockePlaceHolder : MonoBehaviour
 
     private void processInput()
     {
-        if (!gameOver == true)
+        if (state == State.Alive)
         {
             Thrust();
             Rotate();
@@ -65,38 +71,48 @@ public class RockePlaceHolder : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump"))
         {
-            audioS.Play();
+            audioS.PlayOneShot(SoundManager.instance.soundThruster);
             //engineFlames.Play();
         }
 
         if (Input.GetButtonUp("Jump"))
         {
-            audioS.Stop();
-            //engineFlames.Stop();
+           
         }
 
         if (Input.GetButton("Jump"))
         {
+            
+
             rb.isKinematic = false;
             rb.AddRelativeForce(Vector3.up * force);
 
+        }
+        else
+        {
+            audioS.Stop();
+            //engineFlames.Stop();
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        switch (collision.gameObject.tag)
+        if (state == State.Alive)
         {
-            case "Friendly":
-                break;
-            case "Fuel":
-                break;
-            default:
-                transform.DetachChildren();
-                GameManager.instance.GameOver();
-                gameOver = true;
-                audioS.Stop();
-                break;
+            switch (collision.gameObject.tag)
+            {
+                case "Friendly":
+                    break;
+                case "Fuel":
+                    break;
+                default:
+                    transform.DetachChildren();
+                    GameManager.instance.GameOver();
+                    state = State.Dying;
+                    audioS.Stop();
+                    audioS.PlayOneShot(SoundManager.instance.soundImpact);
+                    break;
+            }
         }
     }
 }

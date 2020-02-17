@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject canvas;
 
+    
+
     void Awake()
     {
         if(instance == null)
@@ -29,6 +31,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        PadScript.instance.gameOver = true;
         canvas.SetActive(true);
     }
 
