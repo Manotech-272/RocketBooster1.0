@@ -16,7 +16,9 @@ public class PadScript : MonoBehaviour
 
     public bool gameOver = false;
 
-    public static PadScript instance; 
+    public static PadScript instance;
+
+    public GameObject cellingRocks;
     void Awake()
     {
         if(instance == null)
@@ -24,6 +26,7 @@ public class PadScript : MonoBehaviour
             instance = this;
         }
         audioS = GetComponent<AudioSource>();
+        
     }
 
     void Start()
@@ -36,8 +39,9 @@ public class PadScript : MonoBehaviour
     {
         if (col == true && trig == true && colSpeed <= maxSpeed && !gameOver)
         {
-            GameManager.instance.GameOver();
-            rocket.state = RockePlaceHolder.State.Dying;
+            // GameManager.instance.GameOver();
+            // rocket.state = RockePlaceHolder.State.Dying;
+            cellingRocks.GetComponent<Animator>().enabled = true;
             audioS.PlayOneShot(SoundManager.instance.soundReachedLandingPad);
             gameOver = true;
         }
