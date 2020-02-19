@@ -21,10 +21,12 @@ public class PadScript : MonoBehaviour
     public GameObject cellingRocks;
     void Awake()
     {
+        
         if(instance == null)
         {
             instance = this;
         }
+        
         audioS = GetComponent<AudioSource>();
         
     }
@@ -42,7 +44,8 @@ public class PadScript : MonoBehaviour
             // GameManager.instance.GameOver();
             // rocket.state = RockePlaceHolder.State.Dying;
             cellingRocks.GetComponent<Animator>().enabled = true;
-            audioS.PlayOneShot(SoundManager.instance.soundReachedLandingPad);
+            //audioS.PlayOneShot(SoundManager.instance.soundReachedLandingPad);
+            audioS.enabled = true;
             gameOver = true;
         }
     }
